@@ -62,9 +62,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         }
 
         public void bind(Article article){
-            Multimedia media = article.getMultimedia();
-            if(media != null) {
-                String url = media.getImages().get(media.getImages().size()-1).mGetUrl();
+            if(article.getImages() != null) {
+                String url = article.getImages().get(article.getImages().size()-1).mGetUrl();
                 Glide.with(mContext).load(url).into(mArticleImage);
             }
             mHeadLine.setText(article.getHeadline().getMain());

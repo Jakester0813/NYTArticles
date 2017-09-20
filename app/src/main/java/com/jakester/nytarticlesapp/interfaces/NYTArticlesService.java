@@ -5,6 +5,7 @@ import com.jakester.nytarticlesapp.util.NYTConstants;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by Jake on 9/18/2017.
@@ -12,5 +13,5 @@ import retrofit2.http.GET;
 
 public interface NYTArticlesService {
     @GET(NYTConstants.EXTENDED_URL)
-    Call<Response> getArticles();
+    Call<Response> getArticles(@Query("q") String query);
 }

@@ -9,7 +9,5 @@ import java.util.List;
 public class Multimedia {
     List<Image> mImages;
 
-    public List<Image> getImages(){
-        return mImages;
-    }
+
 }
