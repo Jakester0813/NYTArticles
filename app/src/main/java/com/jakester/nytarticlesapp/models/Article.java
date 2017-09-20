@@ -22,6 +22,7 @@ public class Article {
     @SerializedName("multimedia")
     List<Image> mImages;
 
+    public String getWebUrl() { return mWebUrl; }
 
     public String getSnippet(){
         return mSnippet;

@@ -1,6 +1,12 @@
 package com.jakester.nytarticlesapp.adapters;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +54,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         return mArticles.size();
     }
 
-    public class ArticlesViewHolder extends RecyclerView.ViewHolder {
+    public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView mArticleImage;
         TextView mHeadLine;
         TextView mSnippet;
@@ -59,6 +65,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             mArticleImage = (ImageView) view.findViewById(R.id.iv_image);
             mHeadLine = (TextView) view.findViewById(R.id.tv_headline);
             mSnippet = (TextView) view.findViewById(R.id.tv_snippet);
+            view.setOnClickListener(this);
         }
 
         public void bind(Article article){
@@ -68,6 +75,27 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             }
             mHeadLine.setText(article.getHeadline().getMain());
             mSnippet.setText(article.getSnippet());
+
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Article article = mArticles.get(position);
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, article.getWebUrl());
+
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_share);
+            int requestCode = 100;
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext,requestCode,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            builder.setActionButton(bitmap,"Share Article", pendingIntent, true);
+            CustomTabsIntent customIntent = builder.build();
+            customIntent.launchUrl(mContext, Uri.parse(article.getWebUrl()));
         }
     }
 }
