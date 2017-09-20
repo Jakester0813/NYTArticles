@@ -20,6 +20,9 @@ public class Article {
     @SerializedName("uri")
     String mURI;
 
+    @SerializedName("multimedia")
+    Multimedia mMultimedia;
+
     public String getWebUrl(){
         return mWebUrl;
     }
@@ -33,6 +36,10 @@ public class Article {
     }
 
     public String getURI(){
-        return mURI;
+        return "http://" + mURI + ".jpg";
+    }
+
+    public Multimedia getMultimedia(){
+        return mMultimedia;
     }
 }
