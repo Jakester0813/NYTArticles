@@ -69,9 +69,11 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         }
 
         public void bind(Article article){
-            if(article.getImages() != null) {
+            if(article.getImages() != null && article.getImages().size() > 0) {
+
                 String url = article.getImages().get(article.getImages().size()-1).mGetUrl();
                 Glide.with(mContext).load(url).into(mArticleImage);
+                mArticleImage.setVisibility(View.VISIBLE);
             }
             mHeadLine.setText(article.getHeadline().getMain());
             mSnippet.setText(article.getSnippet());

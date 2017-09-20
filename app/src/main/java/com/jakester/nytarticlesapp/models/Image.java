@@ -11,6 +11,6 @@ public class Image {
     String url;
 
     public String mGetUrl(){
-        return url;
+        return "http://www.nytimes.com/" + url;
     }
 }

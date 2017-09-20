@@ -15,7 +15,6 @@ import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
 import com.jakester.nytarticlesapp.models.Response;
-import com.jakester.nytarticlesapp.network.RestClient;
 import com.jakester.nytarticlesapp.util.APIUtility;
 
 import retrofit2.Call;
