@@ -88,9 +88,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, article.getWebUrl());
+            intent.putExtra(Intent.EXTRA_TEXT, article.getHeadline().getMain());
 
-            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_share);
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_action_name);
             int requestCode = 100;
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext,requestCode,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
