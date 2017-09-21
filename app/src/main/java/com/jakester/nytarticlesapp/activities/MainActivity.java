@@ -1,5 +1,6 @@
 package com.jakester.nytarticlesapp.activities;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
+import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
@@ -20,11 +22,12 @@ import com.jakester.nytarticlesapp.util.APIUtility;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FilterDialogFragment.FilterDialogListener{
 
     RecyclerView mArticlesRecycler;
     StaggeredGridLayoutManager mLayoutManager;
     ArticlesAdapter mAdapter;
+    String mQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                getArticles(query);
-
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
+                mQuery = query;
+                getArticles(mQuery);
                 searchView.clearFocus();
 
                 return true;
@@ -77,5 +78,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                showFiltersDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showFiltersDialog() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        FilterDialogFragment filterDialog = FilterDialogFragment.newInstance("Settings");
+        filterDialog.show(fm,"fragment_settings");
+    }
+
+    @Override
+    public void onFinishFilterDialog() {
+        getArticles(mQuery);
     }
 }

@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">NYTArticlesApp</string>
+    <string name="app_name">New York Times Articles</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="sort_prompt">Sort Articles By...</string>
+    <string name="news_desks_values">News Desks Values</string>
+    <string name="arts_value">Art</string>
+    <string name="fashion_value">Fashion &amp; Style</string>
+    <string name="sport_value">Sports</string>
+    <string name="save_filters">Save Filters</string>
 </resources>
