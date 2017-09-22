@@ -13,6 +13,7 @@ import retrofit2.http.Query;
 
 public interface NYTArticlesService {
     @GET(NYTConstants.EXTENDED_URL)
-    Call<Response> getArticles(@Query("q") String query, @Query("begin_date") String date,
-                               @Query("sort") String sortBy, @Query("fq") String newsDesk);
+    Call<Response> getArticles(@Query("q") String query, @Query("page") int page,
+                               @Query("begin_date") String date, @Query("sort") String sortBy,
+                               @Query("fq") String newsDesk);
 }

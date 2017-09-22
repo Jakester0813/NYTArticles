@@ -16,6 +16,7 @@ import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
 import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
+import com.jakester.nytarticlesapp.listener.EndlessScrollListener;
 import com.jakester.nytarticlesapp.models.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     RecyclerView mArticlesRecycler;
     StaggeredGridLayoutManager mLayoutManager;
     ArticlesAdapter mAdapter;
+    private EndlessScrollListener scrollListener;
     String mQuery = "";
+    int mPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +44,21 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         mArticlesRecycler = (RecyclerView) findViewById(R.id.rv_articles);
         mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mArticlesRecycler.setLayoutManager(mLayoutManager);
+        scrollListener = new EndlessScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                makeArticlesCall(mQuery, page);
+            }
+        };
+        mArticlesRecycler.addOnScrollListener(scrollListener);
 
     }
 
-    public void getArticles(String query, String date, String sortBy, String newsDesk){
+    public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
         NYTArticlesService service = APIUtility.getArticleService();
-        service.getArticles(query, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
+        service.getArticles(query, page, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 mAdapter = new ArticlesAdapter(MainActivity.this, response.body().getArticlesResponse().getArticles());
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mQuery = query;
-                makeArticlesCall(mQuery);
+                makeArticlesCall(mQuery, 0);
                 searchView.clearFocus();
 
                 return true;
@@ -85,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void makeArticlesCall(String q){
+    public void makeArticlesCall(String q, int page){
         String beginDate = FiltersManager.getInstance(this).getFilterDate();
         if(beginDate != null){
             try {
@@ -113,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                 e.printStackTrace();
             }
         }
-        getArticles(q,beginDate,sortFilter,newDesks);
+        mPage = 0;
+        getArticles(q,page,beginDate,sortFilter,newDesks);
     }
 
     @Override
@@ -135,6 +148,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     @Override
     public void onFinishFilterDialog() {
-        makeArticlesCall(mQuery);
+        makeArticlesCall(mQuery, 0);
     }
 }
