@@ -16,6 +16,7 @@ import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
 import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
+import com.jakester.nytarticlesapp.models.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
 
@@ -39,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     }
 
-    public void getArticles(String query){
+    public void getArticles(String query, String date, String sortBy, String newsDesk){
         NYTArticlesService service = APIUtility.getArticleService();
-        service.getArticles(query).enqueue(new Callback<Response>() {
+        service.getArticles(query, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 mAdapter = new ArticlesAdapter(MainActivity.this, response.body().getArticlesResponse().getArticles());
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mQuery = query;
-                getArticles(mQuery);
+                makeArticlesCall(mQuery);
                 searchView.clearFocus();
 
                 return true;
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void makeArticlesCall(String q){
+        String beginDate = FiltersManager.getInstance(this).getFilterDate();
+        String sortFilter = FiltersManager.getInstance(this).getSortFilter();
+        String newDesks = FiltersManager.getInstance(this).getNewsDeskFilter();
+        getArticles(q,beginDate,sortFilter,newDesks);
     }
 
     @Override
@@ -99,6 +107,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     @Override
     public void onFinishFilterDialog() {
-        getArticles(mQuery);
+        makeArticlesCall(mQuery);
     }
 }

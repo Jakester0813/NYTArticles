@@ -34,6 +34,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     private CheckBox mFashionCheck;
     private CheckBox mSportsCheck;
     private Button mButton;
+    StringBuilder dateFilterBuilder;
 
     public FilterDialogFragment(){
 
@@ -51,7 +52,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View view) {
         if(!mDateText.getText().toString().equals(NYTConstants.SET_DATE)){
             FiltersManager.getInstance(getActivity()).setDate(mDateText.getText().toString());
+            FiltersManager.getInstance(getActivity()).setDateFilter(dateFilterBuilder.toString());
         }
+        FiltersManager.getInstance(getActivity()).setSortFilter(mSortSpinner.getSelectedItem().toString().toLowerCase());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_ART,mArtCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_FASHION,mFashionCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_SPORTS,mSportsCheck.isChecked());
@@ -81,6 +84,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             public void onClick(View view) {
                 final Calendar c = Calendar.getInstance();
                 final StringBuilder dateBuilder = new StringBuilder();
+                dateFilterBuilder = new StringBuilder();
                 final int year = c.get(Calendar.YEAR);
                 final int month = c.get(Calendar.MONTH);
                 final int day = c.get(Calendar.DAY_OF_MONTH);
@@ -93,6 +97,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
                                 dateBuilder.append(month+1).append("/").append(dayOfMonth).append("/").append(year);
                                 mDateText.setText(dateBuilder.toString());
+                                dateFilterBuilder.append(year).append(month+1).append(dayOfMonth);
                             }
                         }, year, month, day);
                 datePickerDialog.show();

@@ -13,8 +13,12 @@ public class NYTConstants {
 
     public static final String PREFS_NAME = "NYTimesPrefs";
     public static final String DATE_PREFS = "begin_date";
+    public static final String DATE_FILTER_PREFS = "begin_date_filter";
+    public static final String SORT_PREFS = "sort";
     public static final String PREFS_ART = "art";
     public static final String PREFS_FASHION = "fashion";
     public static final String PREFS_SPORTS = "sports";
+
+    public static final String EMPTY_STRING = "";
 
 }

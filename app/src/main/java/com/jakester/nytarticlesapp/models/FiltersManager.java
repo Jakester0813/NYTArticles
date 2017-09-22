@@ -34,6 +34,24 @@ public class FiltersManager {
         mPrefs.edit().putString(NYTConstants.DATE_PREFS, s).commit();
     }
 
+    public String getFilterDate(){
+        return mPrefs.getString(NYTConstants.DATE_PREFS,null);
+    }
+
+    public void setDateFilter(String s){
+        mPrefs.edit().putString(NYTConstants.DATE_FILTER_PREFS, s).commit();
+    }
+
+    public String getSortFilter(){
+        return mPrefs.getString(NYTConstants.SORT_PREFS,null);
+    }
+
+    public void setSortFilter(String s){
+        if(!s.equals("Select filter...")) {
+            mPrefs.edit().putString(NYTConstants.SORT_PREFS, s).commit();
+        }
+    }
+
     public boolean getArt(){
         return mPrefs.getBoolean(NYTConstants.PREFS_ART,false);
     }
@@ -44,6 +62,25 @@ public class FiltersManager {
 
     public boolean getSports(){
         return mPrefs.getBoolean(NYTConstants.PREFS_SPORTS,false);
+    }
+
+    public String getNewsDeskFilter(){
+        StringBuilder sb = new StringBuilder("");
+        if(getArt() || getFashion() || getSports()) {
+            sb.append("news_desk:(");
+            if(getArt()){
+                sb.append("\"Art\"");
+            }
+            if(getFashion()){
+                sb.append("\"Fashion & Style\"");
+            }
+            if(getSports()){
+                sb.append("\"Sports\"");
+            }
+            sb.append(")");
+            return sb.toString();
+        }
+        return null;
     }
 
     public void setCheck(String key, boolean value){
