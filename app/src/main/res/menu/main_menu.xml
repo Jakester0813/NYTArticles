@@ -12,7 +12,6 @@
         android:orderInCategory="5"
         android:title="Filters"
         android:icon="@drawable/ic_filter_list_black"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:showAsAction="ifRoom" />
 
 </menu>
