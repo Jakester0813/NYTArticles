@@ -52,6 +52,14 @@ public class FiltersManager {
         }
     }
 
+    public int getSortPosition(){
+        return mPrefs.getInt(NYTConstants.SORT_POSITION_PREFS,0);
+    }
+
+    public void setSortPosition(int i){
+        mPrefs.edit().putInt(NYTConstants.SORT_POSITION_PREFS, i).commit();
+    }
+
     public boolean getArt(){
         return mPrefs.getBoolean(NYTConstants.PREFS_ART,false);
     }

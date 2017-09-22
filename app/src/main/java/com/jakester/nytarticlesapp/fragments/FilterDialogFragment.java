@@ -55,6 +55,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             FiltersManager.getInstance(getActivity()).setDateFilter(dateFilterBuilder.toString());
         }
         FiltersManager.getInstance(getActivity()).setSortFilter(mSortSpinner.getSelectedItem().toString().toLowerCase());
+        FiltersManager.getInstance(getActivity()).setSortPosition(mSortSpinner.getSelectedItemPosition());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_ART,mArtCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_FASHION,mFashionCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_SPORTS,mSportsCheck.isChecked());
@@ -114,6 +115,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         mSortByText = (TextView) view.findViewById(R.id.tv_sort_order);
         mSortSpinner = (Spinner) view.findViewById(R.id.sp_sort);
         mSortSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.sort_array, R.layout.spinner_item));
+        mSortSpinner.setSelection(FiltersManager.getInstance(getActivity()).getSortPosition());
 
         mFilterByText = (TextView) view.findViewById(R.id.tv_news_values);
         mArtCheck = (CheckBox) view.findViewById(R.id.checkbox_art);

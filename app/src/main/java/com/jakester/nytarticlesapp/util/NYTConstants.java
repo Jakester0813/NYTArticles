@@ -14,6 +14,7 @@ public class NYTConstants {
     public static final String PREFS_NAME = "NYTimesPrefs";
     public static final String DATE_PREFS = "begin_date";
     public static final String DATE_FILTER_PREFS = "begin_date_filter";
+    public static final String SORT_POSITION_PREFS = "sort_position";
     public static final String SORT_PREFS = "sort";
     public static final String PREFS_ART = "art";
     public static final String PREFS_FASHION = "fashion";
