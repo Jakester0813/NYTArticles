@@ -35,7 +35,7 @@ public class FiltersManager {
     }
 
     public String getFilterDate(){
-        return mPrefs.getString(NYTConstants.DATE_PREFS,null);
+        return mPrefs.getString(NYTConstants.DATE_FILTER_PREFS,null);
     }
 
     public void setDateFilter(String s){
@@ -47,7 +47,7 @@ public class FiltersManager {
     }
 
     public void setSortFilter(String s){
-        if(!s.equals("Select filter...")) {
+        if(!s.equals("select filter...")) {
             mPrefs.edit().putString(NYTConstants.SORT_PREFS, s).commit();
         }
     }

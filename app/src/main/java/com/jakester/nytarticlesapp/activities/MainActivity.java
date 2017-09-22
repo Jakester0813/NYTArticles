@@ -20,6 +20,10 @@ import com.jakester.nytarticlesapp.models.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -83,8 +87,32 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     public void makeArticlesCall(String q){
         String beginDate = FiltersManager.getInstance(this).getFilterDate();
+        if(beginDate != null){
+            try {
+                beginDate = URLEncoder.encode(beginDate, "UTF-8");
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         String sortFilter = FiltersManager.getInstance(this).getSortFilter();
+        if(sortFilter != null){
+            try {
+                sortFilter = URLEncoder.encode(sortFilter, "UTF-8");
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         String newDesks = FiltersManager.getInstance(this).getNewsDeskFilter();
+        if(newDesks != null){
+            try {
+                newDesks = URLEncoder.encode(newDesks, "UTF-8");
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         getArticles(q,beginDate,sortFilter,newDesks);
     }
 

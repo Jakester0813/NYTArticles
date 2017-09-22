@@ -94,10 +94,17 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                dateBuilder.append(month+1).append("/").append(dayOfMonth).append("/").append(year);
+                                dateBuilder.append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year);
                                 mDateText.setText(dateBuilder.toString());
-                                dateFilterBuilder.append(year).append(month+1).append(dayOfMonth);
+                                dateFilterBuilder.append(year);
+                                if(monthOfYear+1 < 10){
+                                    dateFilterBuilder.append("0");
+                                }
+                                dateFilterBuilder.append(monthOfYear+1);
+                                if(dayOfMonth < 10){
+                                    dateFilterBuilder.append("0");
+                                }
+                                dateFilterBuilder.append(dayOfMonth);
                             }
                         }, year, month, day);
                 datePickerDialog.show();
