@@ -37,6 +37,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         mArticles = pArticles;
     }
 
+    public void addList(List<Article> items){
+        mArticles.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clearList(){
+        mArticles.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public ArticlesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View articlesView = LayoutInflater.from(parent.getContext()).inflate(R.layout.articles_layout,parent,false);
@@ -70,7 +80,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
 
         public void bind(Article article){
             if(article.getImages() != null && article.getImages().size() > 0) {
-
                 String url = article.getImages().get(article.getImages().size()-1).mGetUrl();
                 Glide.with(mContext).load(url).into(mArticleImage);
                 mArticleImage.setVisibility(View.VISIBLE);

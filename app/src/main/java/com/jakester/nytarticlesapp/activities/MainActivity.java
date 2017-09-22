@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
 import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
 import com.jakester.nytarticlesapp.listener.EndlessScrollListener;
+import com.jakester.nytarticlesapp.models.Article;
 import com.jakester.nytarticlesapp.models.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
@@ -24,6 +26,8 @@ import com.jakester.nytarticlesapp.util.APIUtility;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                 makeArticlesCall(mQuery, page);
             }
         };
+
+        mAdapter = new ArticlesAdapter(MainActivity.this, new ArrayList<Article>());
+        mArticlesRecycler.setAdapter(mAdapter);
         mArticlesRecycler.addOnScrollListener(scrollListener);
 
     }
@@ -61,14 +68,18 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         service.getArticles(query, page, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                mAdapter = new ArticlesAdapter(MainActivity.this, response.body().getArticlesResponse().getArticles());
-                mArticlesRecycler.setAdapter(mAdapter);
+                if (response.body() != null){
+                    mAdapter.addList(response.body().getArticlesResponse().getArticles());
+                }
+                else{
+                    Toast.makeText(MainActivity.this,"No articles returned!!", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
 
-                Log.d("","");
+                Log.e("Error",t.getLocalizedMessage());
             }
         });
     }
@@ -82,6 +93,10 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if(mAdapter != null) {
+                    mAdapter.clearList();
+                    scrollListener.resetState();
+                }
                 mQuery = query;
                 makeArticlesCall(mQuery, 0);
                 searchView.clearFocus();
@@ -125,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                 e.printStackTrace();
             }
         }
-        mPage = 0;
         getArticles(q,page,beginDate,sortFilter,newDesks);
     }
 
