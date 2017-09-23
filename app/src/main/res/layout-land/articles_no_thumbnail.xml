@@ -17,13 +17,6 @@
             android:layout_height="wrap_content"
             android:padding="6dp">
 
-            <ImageView
-                android:id="@+id/iv_image"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginBottom="4dp"
-                android:visibility="gone"/>
-
             <TextView
                 android:id="@+id/tv_headline"
                 android:layout_width="wrap_content"
