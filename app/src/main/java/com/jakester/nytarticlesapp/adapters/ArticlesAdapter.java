@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
 import com.jakester.nytarticlesapp.models.Article;
+import com.jakester.nytarticlesapp.util.BindingAdapterUtils;
 
 import java.util.List;
 
@@ -55,8 +56,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     @Override
     public void onBindViewHolder(ArticlesViewHolder holder, int position) {
         final Article article = mArticles.get(position);
+        article.setImageUrl();
         holder.binding.setArticle(article);
-        //holder.bind(mArticles.get(position));
+        holder.binding.executePendingBindings();
     }
 
     @Override

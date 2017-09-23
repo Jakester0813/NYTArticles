@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Headline {
     @SerializedName("main")
-    String mMain;
+    public String mMain;
 
     @SerializedName("print_headline")
     String mPrintHeadline;

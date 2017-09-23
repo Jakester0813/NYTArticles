@@ -14,13 +14,15 @@ public class Article {
     String mWebUrl;
 
     @SerializedName("snippet")
-    String mSnippet;
+    public String mSnippet;
 
     @SerializedName("headline")
-    Headline mHeadline;
+    public Headline mHeadline;
 
     @SerializedName("multimedia")
-    List<Image> mImages;
+    public List<Image> mImages;
+
+    public String imageUrl;
 
     public String getWebUrl() { return mWebUrl; }
 
@@ -32,7 +34,11 @@ public class Article {
         return mHeadline;
     }
 
-    public List<Image> getImages(){
-        return mImages;
+    public String getImageUrl(){
+        return imageUrl;
+    }
+
+    public void setImageUrl(){
+        imageUrl = mImages.get(0).mGetUrl();
     }
 }

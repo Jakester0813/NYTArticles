@@ -24,6 +24,7 @@
                 android:id="@+id/iv_image"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                app:imageUrl='@{article.imageUrl}'
                 android:layout_marginBottom="4dp"
                 android:visibility="gone"/>
 
@@ -34,7 +35,7 @@
                 android:layout_marginBottom="4dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="@{article.headline}"/>
+                android:text='@{article.mHeadline.mMain}'/>
 
             <TextView
                 android:id="@+id/tv_snippet"
