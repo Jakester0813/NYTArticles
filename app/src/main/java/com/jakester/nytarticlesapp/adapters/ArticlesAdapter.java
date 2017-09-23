@@ -16,10 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jakester.nytarticlesapp.R;
+import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
 import com.jakester.nytarticlesapp.models.Article;
-import com.jakester.nytarticlesapp.models.Multimedia;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -56,7 +54,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
 
     @Override
     public void onBindViewHolder(ArticlesViewHolder holder, int position) {
-        holder.bind(mArticles.get(position));
+        final Article article = mArticles.get(position);
+        holder.binding.setArticle(article);
+        //holder.bind(mArticles.get(position));
     }
 
     @Override
@@ -65,22 +65,18 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     }
 
     public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView mArticleImage;
-        TextView mHeadLine;
-        TextView mSnippet;
+        final ArticlesLayoutBinding binding;
 
 
         public ArticlesViewHolder(View view){
             super(view);
-            mArticleImage = (ImageView) view.findViewById(R.id.iv_image);
-            mHeadLine = (TextView) view.findViewById(R.id.tv_headline);
-            mSnippet = (TextView) view.findViewById(R.id.tv_snippet);
-            view.setOnClickListener(this);
+            binding = ArticlesLayoutBinding.bind(view);
         }
 
         public void bind(Article article){
             if(article.getImages() != null && article.getImages().size() > 0) {
-                String url = article.getImages().get(article.getImages().size()-1).mGetUrl();
+                //BindingAdapterUtils.loadImage(mArticleImage,article.getImages().get(article.getImages().size()-1).mGetUrl());
+                String url = mArticles.get(getAdapterPosition()).getImages().get(0).mGetUrl();
                 Glide.with(mContext).load(url).into(mArticleImage);
                 mArticleImage.setVisibility(View.VISIBLE);
             }

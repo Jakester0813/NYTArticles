@@ -3,6 +3,7 @@ package com.jakester.nytarticlesapp.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
+import com.jakester.nytarticlesapp.databinding.ActivityMainBinding;
 import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
 import com.jakester.nytarticlesapp.listener.EndlessScrollListener;
@@ -30,10 +32,8 @@ import com.jakester.nytarticlesapp.util.APIUtility;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     StaggeredGridLayoutManager mLayoutManager;
     ArticlesAdapter mAdapter;
     private EndlessScrollListener scrollListener;
+    ActivityMainBinding binding;
     String mQuery = "";
     int mPage = 0;
     AlertDialog noInternetDialog;
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mArticlesRecycler = (RecyclerView) findViewById(R.id.rv_articles);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mArticlesRecycler = binding.rvArticles;
         mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mArticlesRecycler.setLayoutManager(mLayoutManager);
         scrollListener = new EndlessScrollListener(mLayoutManager) {
