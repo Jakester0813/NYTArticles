@@ -40,8 +40,9 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] Added landscape support for the app
+* [x] Added landscape support for the app
 * [ ] Made UI improvements
+* [ ] Uses Managers to seperate data from activities
 
 ## Video Walkthrough
 

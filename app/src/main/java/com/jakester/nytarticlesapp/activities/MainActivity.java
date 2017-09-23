@@ -3,6 +3,7 @@ package com.jakester.nytarticlesapp.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -55,7 +56,13 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mArticlesRecycler = binding.rvArticles;
-        mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            mLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        }
+
         mArticlesRecycler.setLayoutManager(mLayoutManager);
         scrollListener = new EndlessScrollListener(mLayoutManager) {
             @Override
