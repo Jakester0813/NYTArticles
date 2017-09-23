@@ -90,23 +90,18 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
                 final int month = c.get(Calendar.MONTH);
                 final int day = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                dateBuilder.append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year);
-                                mDateText.setText(dateBuilder.toString());
-                                dateFilterBuilder.append(year);
-                                if(monthOfYear+1 < 10){
-                                    dateFilterBuilder.append("0");
-                                }
-                                dateFilterBuilder.append(monthOfYear+1);
-                                if(dayOfMonth < 10){
-                                    dateFilterBuilder.append("0");
-                                }
-                                dateFilterBuilder.append(dayOfMonth);
+                        (view1, year1, monthOfYear, dayOfMonth) -> {
+                            dateBuilder.append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year1);
+                            mDateText.setText(dateBuilder.toString());
+                            dateFilterBuilder.append(year1);
+                            if(monthOfYear+1 < 10){
+                                dateFilterBuilder.append("0");
                             }
+                            dateFilterBuilder.append(monthOfYear+1);
+                            if(dayOfMonth < 10){
+                                dateFilterBuilder.append("0");
+                            }
+                            dateFilterBuilder.append(dayOfMonth);
                         }, year, month, day);
                 datePickerDialog.show();
             }

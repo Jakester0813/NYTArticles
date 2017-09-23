@@ -73,19 +73,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             binding = ArticlesLayoutBinding.bind(view);
         }
 
-        public void bind(Article article){
-            if(article.getImages() != null && article.getImages().size() > 0) {
-                //BindingAdapterUtils.loadImage(mArticleImage,article.getImages().get(article.getImages().size()-1).mGetUrl());
-                String url = mArticles.get(getAdapterPosition()).getImages().get(0).mGetUrl();
-                Glide.with(mContext).load(url).into(mArticleImage);
-                mArticleImage.setVisibility(View.VISIBLE);
-            }
-            mHeadLine.setText(article.getHeadline().getMain());
-            mSnippet.setText(article.getSnippet());
-
-
-        }
-
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
