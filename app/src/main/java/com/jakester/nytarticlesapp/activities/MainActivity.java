@@ -1,5 +1,10 @@
 package com.jakester.nytarticlesapp.activities;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +28,7 @@ import com.jakester.nytarticlesapp.models.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     private EndlessScrollListener scrollListener;
     String mQuery = "";
     int mPage = 0;
+    AlertDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,12 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                makeArticlesCall(mQuery, page);
+                if(isNetworkAvailable() && isOnline()) {
+                    makeArticlesCall(mQuery, 0);
+                }
+                else{
+                    noInternetDialog.show();
+                }
             }
         };
 
@@ -61,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         mArticlesRecycler.setAdapter(mAdapter);
         mArticlesRecycler.addOnScrollListener(scrollListener);
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        noInternetDialog = noInternetDialog();
     }
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
@@ -93,14 +111,18 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(mAdapter != null) {
-                    mAdapter.clearList();
-                    scrollListener.resetState();
+                if(isNetworkAvailable() && isOnline()) {
+                    if(mAdapter != null) {
+                        mAdapter.clearList();
+                        scrollListener.resetState();
+                    }
+                    mQuery = query;
+                    makeArticlesCall(mQuery, 0);
+                    searchView.clearFocus();
                 }
-                mQuery = query;
-                makeArticlesCall(mQuery, 0);
-                searchView.clearFocus();
-
+                else{
+                    noInternetDialog.show();
+                }
                 return true;
             }
 
@@ -160,8 +182,46 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         filterDialog.show(fm,"fragment_settings");
     }
 
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
+    }
+
     @Override
     public void onFinishFilterDialog() {
-        makeArticlesCall(mQuery, 0);
+        if(isNetworkAvailable() && isOnline()) {
+            makeArticlesCall(mQuery, 0);
+        }
+        else{
+            noInternetDialog.show();
+        }
+    }
+
+    private AlertDialog noInternetDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("No Internet");
+        builder1.setMessage("It seems that you are not connected to the internet. Make sure that you are connected before");
+        builder1.setCancelable(true);
+        builder1.setNeutralButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        return builder1.create();
     }
 }
