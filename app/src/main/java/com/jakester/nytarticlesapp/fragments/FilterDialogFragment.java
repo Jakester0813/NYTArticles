@@ -70,6 +70,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_layout_search_filters, container);
     }
 
@@ -129,8 +130,6 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         mSaveLayout = (LinearLayout) view.findViewById(R.id.ll_save_filter);
         mSaveLayout.setOnClickListener(this);
 
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
 }
