@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     static String mQuery = "";
     int mPage = 0;
     AlertDialog noInternetDialog;
+    AlertDialog noArticlesDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     public void onResume(){
         super.onResume();
         noInternetDialog = InternetManager.getInstance(this).noInternetDialog();
+        noArticlesDialog = InternetManager.getInstance(this).noArticlesDialog();
         if(!mQuery.equals(""))
             makeArticlesCall(mQuery,0);
     }
@@ -102,14 +104,13 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                     mAdapter.addList(response.body().getArticlesResponse().getArticles());
                 }
                 else{
-                    Toast.makeText(MainActivity.this,"No articles returned!!", Toast.LENGTH_LONG).show();
+                    noArticlesDialog.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
-
-                Log.e("Error",t.getLocalizedMessage());
+                noArticlesDialog.show();
             }
         });
     }

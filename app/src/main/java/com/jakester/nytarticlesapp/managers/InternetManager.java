@@ -56,7 +56,22 @@ public class InternetManager {
     public AlertDialog noInternetDialog(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
         builder1.setTitle("No Internet");
-        builder1.setMessage("It seems that you are not connected to the internet. Make sure that you are connected before");
+        builder1.setMessage("It seems that you are not connected to the internet. Make sure that you are connected before trying again");
+        builder1.setCancelable(true);
+        builder1.setNeutralButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        return builder1.create();
+    }
+
+    public AlertDialog noArticlesDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+        builder1.setTitle("No results");
+        builder1.setMessage("No articles returned from your search. Please check your input and try again.");
         builder1.setCancelable(true);
         builder1.setNeutralButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
