@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     private EndlessScrollListener scrollListener;
     ActivityMainBinding binding;
     static String mQuery = NYTConstants.EMPTY_STRING;
-    int mPage = 0;
     AlertDialog noInternetDialog;
     AlertDialog noArticlesDialog;
     ProgressDialog mProgress;
+    boolean mFromWebPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +96,12 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         super.onResume();
         noInternetDialog = InternetManager.getInstance(this).noInternetDialog();
         noArticlesDialog = InternetManager.getInstance(this).noArticlesDialog();
-        if(!mQuery.equals(NYTConstants.EMPTY_STRING)) {
+        if(!mQuery.equals(NYTConstants.EMPTY_STRING) && !InternetManager.getInstance(this).getFromWeb()) {
             mProgress.show();
             makeArticlesCall(mQuery, 0);
+        }
+        else if (InternetManager.getInstance(this).getFromWeb()){
+            InternetManager.getInstance(this).switchFromWeb(false);
         }
     }
 

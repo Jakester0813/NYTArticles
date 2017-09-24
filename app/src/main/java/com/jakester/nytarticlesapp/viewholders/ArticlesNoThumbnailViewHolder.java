@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
 import com.jakester.nytarticlesapp.databinding.ArticlesNoThumbnailBinding;
+import com.jakester.nytarticlesapp.managers.InternetManager;
 import com.jakester.nytarticlesapp.models.Article;
 import com.jakester.nytarticlesapp.util.NYTConstants;
 
@@ -53,6 +54,7 @@ public class ArticlesNoThumbnailViewHolder extends RecyclerView.ViewHolder imple
         //Added the check to not trigger webview loads for urls containing topics.nytimes.com
         //Since they don't load on webview
         if(!mArticle.getWebUrl().contains(NYTConstants.TOPIC_NYTIMES)) {
+            InternetManager.getInstance(mContext).switchFromWeb(true);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(NYTConstants.TEXT_PLAIN);
             intent.putExtra(Intent.EXTRA_TEXT, mArticle.getWebUrl());

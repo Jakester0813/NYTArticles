@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
+import com.jakester.nytarticlesapp.managers.InternetManager;
 import com.jakester.nytarticlesapp.models.Article;
 import com.jakester.nytarticlesapp.util.NYTConstants;
 
@@ -52,6 +53,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.
     @Override
     public void onClick(View view) {
 
+        InternetManager.getInstance(mContext).switchFromWeb(true);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(NYTConstants.TEXT_PLAIN);
         intent.putExtra(Intent.EXTRA_TEXT, mArticle.getWebUrl());

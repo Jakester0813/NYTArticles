@@ -18,6 +18,7 @@ public class InternetManager {
 
     private static InternetManager mInstance = null;
     private static Context mContext;
+    private boolean mFromWeb;
 
     public static InternetManager getInstance(Context pContext){
         if(mInstance == null){
@@ -28,6 +29,7 @@ public class InternetManager {
 
     public InternetManager(Context pContext){
         mContext = pContext;
+        mFromWeb = false;
     }
 
 
@@ -83,5 +85,13 @@ public class InternetManager {
                 });
 
         return builder1.create();
+    }
+
+    public void switchFromWeb(boolean value){
+        mFromWeb = value;
+    }
+
+    public boolean getFromWeb(){
+        return mFromWeb;
     }
 }
