@@ -63,7 +63,7 @@ public class FiltersManager {
     }
 
     public void setSortFilter(String s){
-        if(!s.equals("select filter...")) {
+        if(!s.equals(NYTConstants.SELECT_FILTER_LOWER)) {
             mPrefs.edit().putString(NYTConstants.SORT_PREFS, s).commit();
             mSortBy = s;
         }
@@ -133,29 +133,29 @@ public class FiltersManager {
     }
 
     public String getNewsDeskFilter(){
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder(NYTConstants.EMPTY_STRING);
         if(getArt() || getFashion() || getSports()) {
-            sb.append("news_desk:(");
+            sb.append(NYTConstants.NEWS_DESK);
             if(getArt()){
-                sb.append("\"Art\"");
+                sb.append(NYTConstants.ART);
             }
             if(getDining()){
-                sb.append("\"Dining\"");
+                sb.append(NYTConstants.DINING);
             }
             if(getFashion()){
-                sb.append("\"Fashion & Style\"");
+                sb.append(NYTConstants.FASHION);
             }
 
             if(getHome()){
-                sb.append("\"Home\"");
+                sb.append(NYTConstants.HOME);
             }
             if(getMovies()){
-                sb.append("\"Movies\"");
+                sb.append(NYTConstants.MOVIES);
             }
             if(getSports()){
-                sb.append("\"Sports\"");
+                sb.append(NYTConstants.SPORTS);
             }
-            sb.append(")");
+            sb.append(NYTConstants.CLOSE);
             return sb.toString();
         }
         return null;

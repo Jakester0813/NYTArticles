@@ -1,6 +1,7 @@
 package com.jakester.nytarticlesapp.activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -31,6 +32,7 @@ import com.jakester.nytarticlesapp.models.Article;
 import com.jakester.nytarticlesapp.managers.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
+import com.jakester.nytarticlesapp.util.NYTConstants;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -47,10 +49,11 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     ArticlesAdapter mAdapter;
     private EndlessScrollListener scrollListener;
     ActivityMainBinding binding;
-    static String mQuery = "";
+    static String mQuery = NYTConstants.EMPTY_STRING;
     int mPage = 0;
     AlertDialog noInternetDialog;
     AlertDialog noArticlesDialog;
+    ProgressDialog mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         mAdapter = new ArticlesAdapter(MainActivity.this, new ArrayList<Article>());
         mArticlesRecycler.setAdapter(mAdapter);
         mArticlesRecycler.addOnScrollListener(scrollListener);
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage(NYTConstants.PROGRESS_DIALOG_MESSAGE);
 
     }
 
@@ -91,8 +96,10 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         super.onResume();
         noInternetDialog = InternetManager.getInstance(this).noInternetDialog();
         noArticlesDialog = InternetManager.getInstance(this).noArticlesDialog();
-        if(!mQuery.equals(""))
-            makeArticlesCall(mQuery,0);
+        if(!mQuery.equals(NYTConstants.EMPTY_STRING)) {
+            mProgress.show();
+            makeArticlesCall(mQuery, 0);
+        }
     }
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
@@ -102,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 if (response.body() != null){
                     mAdapter.addList(response.body().getArticlesResponse().getArticles());
+                    if(mProgress.isShowing()){
+                        mProgress.hide();
+                    }
                 }
                 else{
                     noArticlesDialog.show();
@@ -130,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                         scrollListener.resetState();
                     }
                     mQuery = query;
+                    mProgress.show();
                     makeArticlesCall(mQuery, 0);
                     searchView.clearFocus();
                 }
@@ -162,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     private void showFiltersDialog() {
         FragmentManager fm = this.getSupportFragmentManager();
-        FilterDialogFragment filterDialog = FilterDialogFragment.newInstance("Settings");
-        filterDialog.show(fm,"fragment_settings");
+        FilterDialogFragment filterDialog = FilterDialogFragment.newInstance(NYTConstants.SETTINGS);
+        filterDialog.show(fm,NYTConstants.FRAGMENT_SETTINGS);
     }
 
 
@@ -171,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     @Override
     public void onFinishFilterDialog() {
         if(InternetManager.getInstance(this).isInternetAvailable()) {
+            mProgress.show();
             makeArticlesCall(mQuery, 0);
         }
         else{
@@ -182,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         String beginDate = FiltersManager.getInstance(this).getFilterDate();
         if(beginDate != null){
             try {
-                beginDate = URLEncoder.encode(beginDate, "UTF-8");
+                beginDate = URLEncoder.encode(beginDate, NYTConstants.UTF8);
             }
             catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -191,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         String sortFilter = FiltersManager.getInstance(this).getSortFilter();
         if(sortFilter != null){
             try {
-                sortFilter = URLEncoder.encode(sortFilter, "UTF-8");
+                sortFilter = URLEncoder.encode(sortFilter, NYTConstants.UTF8);
             }
             catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -200,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         String newDesks = FiltersManager.getInstance(this).getNewsDeskFilter();
         if(newDesks != null){
             try {
-                newDesks = URLEncoder.encode(newDesks, "UTF-8");
+                newDesks = URLEncoder.encode(newDesks, NYTConstants.UTF8);
             }
             catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

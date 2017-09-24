@@ -39,7 +39,6 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public static FilterDialogFragment newInstance(String title){
         FilterDialogFragment frag = new FilterDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
         frag.setArguments(args);
         return frag;
     }
@@ -91,15 +90,15 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
                 final int day = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
                         (view1, year1, monthOfYear, dayOfMonth) -> {
-                            dateBuilder.append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year1);
+                            dateBuilder.append(monthOfYear+1).append(NYTConstants.SLASH).append(dayOfMonth).append(NYTConstants.SLASH).append(year1);
                             mDateText.setText(dateBuilder.toString());
                             dateFilterBuilder.append(year1);
                             if(monthOfYear+1 < 10){
-                                dateFilterBuilder.append("0");
+                                dateFilterBuilder.append(NYTConstants.ZERO);
                             }
                             dateFilterBuilder.append(monthOfYear+1);
                             if(dayOfMonth < 10){
-                                dateFilterBuilder.append("0");
+                                dateFilterBuilder.append(NYTConstants.ZERO);
                             }
                             dateFilterBuilder.append(dayOfMonth);
                         }, year, month, day);

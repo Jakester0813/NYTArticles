@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
 import com.jakester.nytarticlesapp.models.Article;
+import com.jakester.nytarticlesapp.util.NYTConstants;
 
 /**
  * Created by Jake on 9/23/2017.
@@ -33,6 +34,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.
         this.mHeadline = (TextView) view.findViewById(R.id.tv_headline);
         this.mSnippet = (TextView) view.findViewById(R.id.tv_snippet);
         this.mContext = pContext;
+        view.setOnClickListener(this);
     }
 
     public void bind(Article pArticle){
@@ -51,7 +53,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.
     public void onClick(View view) {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
+        intent.setType(NYTConstants.TEXT_PLAIN);
         intent.putExtra(Intent.EXTRA_TEXT, mArticle.getWebUrl());
 
         Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_action_name);
@@ -59,7 +61,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder implements View.
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext,requestCode,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setActionButton(bitmap,"Share Article", pendingIntent, true);
+        builder.setActionButton(bitmap,NYTConstants.SHARE_ARTICLE, pendingIntent, true);
         CustomTabsIntent customIntent = builder.build();
         customIntent.launchUrl(mContext, Uri.parse(mArticle.getWebUrl()));
     }

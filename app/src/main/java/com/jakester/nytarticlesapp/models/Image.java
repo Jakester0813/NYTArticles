@@ -1,6 +1,7 @@
 package com.jakester.nytarticlesapp.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.jakester.nytarticlesapp.util.NYTConstants;
 
 /**
  * Created by Jake on 9/19/2017.
@@ -11,6 +12,6 @@ public class Image {
     String url;
 
     public String mGetUrl(){
-        return "http://www.nytimes.com/" + url;
+        return NYTConstants.NYT_URL + url;
     }
 }

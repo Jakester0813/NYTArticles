@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.jakester.nytarticlesapp.util.NYTConstants;
+
 import java.io.IOException;
 
 /**
@@ -43,7 +45,7 @@ public class InternetManager {
     private boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            Process ipProcess = runtime.exec(NYTConstants.NETWORK_EXEC);
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
         } catch (IOException e)          { e.printStackTrace(); }
@@ -55,8 +57,8 @@ public class InternetManager {
 
     public AlertDialog noInternetDialog(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-        builder1.setTitle("No Internet");
-        builder1.setMessage("It seems that you are not connected to the internet. Make sure that you are connected before trying again");
+        builder1.setTitle(NYTConstants.NO_INTERNET_TITLE);
+        builder1.setMessage(NYTConstants.NO_INTERNET_TEXT);
         builder1.setCancelable(true);
         builder1.setNeutralButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
@@ -70,8 +72,8 @@ public class InternetManager {
 
     public AlertDialog noArticlesDialog(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-        builder1.setTitle("No results");
-        builder1.setMessage("No articles returned from your search. Please check your input and try again.");
+        builder1.setTitle(NYTConstants.NO_ARTICLES_TITLE);
+        builder1.setMessage(NYTConstants.NO_ARTICLES_TEXT);
         builder1.setCancelable(true);
         builder1.setNeutralButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {

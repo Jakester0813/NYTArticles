@@ -2,7 +2,7 @@
 
 **NYTArticlesApp** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
 
-Time spent: **25** hours spent in total
+Time spent: **27** hours spent in total
 
 ## User Stories
 
@@ -44,6 +44,7 @@ The following **additional** features are implemented:
 * [x] Made UI improvements
 * [x] Implemented managers to seperate business logic from activities
 * [x] Added more categories for News Desk filters
+* [x] Added Progress Dialog when the app is loading articles
 
 ## Video Walkthrough
 

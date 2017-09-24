@@ -16,6 +16,8 @@ import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.databinding.ArticlesLayoutBinding;
 import com.jakester.nytarticlesapp.databinding.ArticlesNoThumbnailBinding;
 import com.jakester.nytarticlesapp.models.Article;
+import com.jakester.nytarticlesapp.util.NYTConstants;
+
 
 /**
  * Created by Jake on 9/23/2017.
@@ -31,6 +33,7 @@ public class ArticlesNoThumbnailViewHolder extends RecyclerView.ViewHolder imple
         mContext = pContext;
         this.mHeadline = (TextView) view.findViewById(R.id.tv_headline);
         this.mSnippet = (TextView) view.findViewById(R.id.tv_snippet);
+        view.setOnClickListener(this);
     }
 
     public void bind(Article pArticle){
@@ -47,18 +50,21 @@ public class ArticlesNoThumbnailViewHolder extends RecyclerView.ViewHolder imple
 
     @Override
     public void onClick(View view) {
+        //Added the check to not trigger webview loads for urls containing topics.nytimes.com
+        //Since they don't load on webview
+        if(!mArticle.getWebUrl().contains(NYTConstants.TOPIC_NYTIMES)) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType(NYTConstants.TEXT_PLAIN);
+            intent.putExtra(Intent.EXTRA_TEXT, mArticle.getWebUrl());
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, mArticle.getWebUrl());
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_action_name);
+            int requestCode = 100;
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_action_name);
-        int requestCode = 100;
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setActionButton(bitmap, "Share Article", pendingIntent, true);
-        CustomTabsIntent customIntent = builder.build();
-        customIntent.launchUrl(mContext, Uri.parse(mArticle.getWebUrl()));
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            builder.setActionButton(bitmap, NYTConstants.SHARE_ARTICLE, pendingIntent, true);
+            CustomTabsIntent customIntent = builder.build();
+            customIntent.launchUrl(mContext, Uri.parse(mArticle.getWebUrl()));
+        }
     }
 }
