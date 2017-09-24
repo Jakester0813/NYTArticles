@@ -14,6 +14,9 @@ public class FiltersManager {
     public static FiltersManager mInstance;
 
     public SharedPreferences mPrefs;
+    public boolean mArtChecked, mFashionChecked, mSportsChecked;
+    public String mDate, mSortBy, mDateFilter;
+    public int mSortPosition;
 
     public static FiltersManager getInstance(Context pContext){
         if(mInstance == null){
@@ -24,52 +27,79 @@ public class FiltersManager {
 
     public FiltersManager(Context pContext){
         mPrefs = pContext.getSharedPreferences(NYTConstants.PREFS_NAME,Context.MODE_PRIVATE);
+        mDate = mPrefs.getString(NYTConstants.DATE_PREFS,NYTConstants.SET_DATE);
+        mSortBy = mPrefs.getString(NYTConstants.SORT_PREFS,null);
+        mSortPosition = mPrefs.getInt(NYTConstants.SORT_POSITION_PREFS,0);
+        mDateFilter = mPrefs.getString(NYTConstants.DATE_FILTER_PREFS,null);
+        mArtChecked = mPrefs.getBoolean(NYTConstants.PREFS_ART,false);
+        mFashionChecked = mPrefs.getBoolean(NYTConstants.PREFS_FASHION,false);
+        mSportsChecked = mPrefs.getBoolean(NYTConstants.PREFS_SPORTS,false);
+
     }
 
     public String getDate(){
-        return mPrefs.getString(NYTConstants.DATE_PREFS,NYTConstants.SET_DATE);
+        return mDate;
     }
 
     public void setDate(String s){
+        mDate = s;
         mPrefs.edit().putString(NYTConstants.DATE_PREFS, s).commit();
     }
 
     public String getFilterDate(){
-        return mPrefs.getString(NYTConstants.DATE_FILTER_PREFS,null);
+        return mDateFilter;
     }
 
     public void setDateFilter(String s){
         mPrefs.edit().putString(NYTConstants.DATE_FILTER_PREFS, s).commit();
+        mDateFilter = s;
     }
 
     public String getSortFilter(){
-        return mPrefs.getString(NYTConstants.SORT_PREFS,null);
+        return mSortBy;
     }
 
     public void setSortFilter(String s){
         if(!s.equals("select filter...")) {
             mPrefs.edit().putString(NYTConstants.SORT_PREFS, s).commit();
+            mSortBy = s;
         }
     }
 
     public int getSortPosition(){
-        return mPrefs.getInt(NYTConstants.SORT_POSITION_PREFS,0);
+        return mSortPosition;
     }
 
     public void setSortPosition(int i){
         mPrefs.edit().putInt(NYTConstants.SORT_POSITION_PREFS, i).commit();
+        mSortPosition = i;
     }
 
     public boolean getArt(){
-        return mPrefs.getBoolean(NYTConstants.PREFS_ART,false);
+        return mArtChecked;
+    }
+
+    public void setArtChecked(boolean value){
+        mArtChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_ART, value).commit();
     }
 
     public boolean getFashion(){
-        return mPrefs.getBoolean(NYTConstants.PREFS_FASHION,false);
+        return mFashionChecked;
+    }
+
+    public void setFashionCheck(boolean value){
+        mFashionChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_FASHION, value).commit();
     }
 
     public boolean getSports(){
-        return mPrefs.getBoolean(NYTConstants.PREFS_SPORTS,false);
+        return mFashionChecked;
+    }
+
+    public void setSportCheck(boolean value){
+        mSportsChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_SPORTS, value).commit();
     }
 
     public String getNewsDeskFilter(){
@@ -89,10 +119,6 @@ public class FiltersManager {
             return sb.toString();
         }
         return null;
-    }
-
-    public void setCheck(String key, boolean value){
-        mPrefs.edit().putBoolean(key, value).commit();
     }
 
 
