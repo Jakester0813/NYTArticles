@@ -50,7 +50,12 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Portrait Mode:
+
+<img src='https://i.imgur.com/NGIli2M.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Portrait' />
+
+Landscape Mode:
+<img src='https://i.imgur.com/nzP42gY.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Landscape' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -60,8 +65,9 @@ Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
-- [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
-- [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Retrofit](http://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java
+- [Glide](https://github.com/bumptech/glide) - An image loading and caching library for Android focused on smooth scrolling
+- [Custom Chrome Tabs](https://developer.chrome.com/multidevice/android/customtabs) - Chrome Custom Tabs allow an app to customize how Chrome looks and feels.
 
 ## License
 
