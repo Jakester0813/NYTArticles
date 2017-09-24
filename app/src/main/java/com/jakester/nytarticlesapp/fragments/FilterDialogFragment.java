@@ -45,9 +45,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        if(!mDateText.getText().toString().equals(NYTConstants.SET_DATE)){
+        if(!mDateText.getText().toString().equals(NYTConstants.SET_DATE) && !dateFilterBuilder.toString().equals(NYTConstants.EMPTY_STRING)){
             FiltersManager.getInstance(getActivity()).setDate(mDateText.getText().toString());
-            FiltersManager.getInstance(getActivity()).setDateFilter(mBeginDateText.getText().toString());
+            FiltersManager.getInstance(getActivity()).setDateFilter(dateFilterBuilder.toString());
         }
         FiltersManager.getInstance(getActivity()).setSortFilter(mSortSpinner.getSelectedItem().toString().toLowerCase());
         FiltersManager.getInstance(getActivity()).setSortPosition(mSortSpinner.getSelectedItemPosition());
@@ -77,6 +77,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBeginDateText = (TextView) view.findViewById(R.id.tv_begin_date);
+        dateFilterBuilder = new StringBuilder(NYTConstants.EMPTY_STRING);
         mDateText = (TextView) view.findViewById(R.id.tv_begin_date_text);
         mDateText.setText(FiltersManager.getInstance(getActivity()).getDate());
         mDateText.setOnClickListener(new View.OnClickListener() {

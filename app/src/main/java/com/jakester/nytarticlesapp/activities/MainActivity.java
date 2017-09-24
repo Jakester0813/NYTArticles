@@ -117,12 +117,14 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
                     }
                 }
                 else{
-                    noArticlesDialog.show();
+                    if(page != 1)
+                        noArticlesDialog.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
+
                 noArticlesDialog.show();
             }
         });
@@ -186,6 +188,10 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     public void onFinishFilterDialog() {
         if(InternetManager.getInstance(this).isInternetAvailable()) {
             mProgress.show();
+            if(mAdapter != null) {
+                mAdapter.clearList();
+                scrollListener.resetState();
+            }
             makeArticlesCall(mQuery, 0);
         }
         else{

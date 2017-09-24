@@ -34,7 +34,7 @@ public class InternetManager {
 
 
     public boolean isInternetAvailable(){
-        return isNetworkAvailable() && isOnline();
+        return isNetworkAvailable();
     }
 
     private boolean isNetworkAvailable() {

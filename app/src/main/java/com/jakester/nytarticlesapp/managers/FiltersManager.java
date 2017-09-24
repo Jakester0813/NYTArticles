@@ -124,7 +124,7 @@ public class FiltersManager {
     }
 
     public boolean getSports(){
-        return mFashionChecked;
+        return mSportsChecked;
     }
 
     public void setSportCheck(boolean value){
@@ -134,7 +134,7 @@ public class FiltersManager {
 
     public String getNewsDeskFilter(){
         StringBuilder sb = new StringBuilder(NYTConstants.EMPTY_STRING);
-        if(getArt() || getFashion() || getSports()) {
+        if(getArt() || getDining() || getFashion() || getHome() || getMovies() || getSports()) {
             sb.append(NYTConstants.NEWS_DESK);
             if(getArt()){
                 sb.append(NYTConstants.ART);
