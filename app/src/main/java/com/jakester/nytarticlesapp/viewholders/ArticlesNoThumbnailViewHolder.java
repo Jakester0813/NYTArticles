@@ -29,11 +29,18 @@ public class ArticlesNoThumbnailViewHolder extends RecyclerView.ViewHolder imple
     public ArticlesNoThumbnailViewHolder(View view, Context pContext) {
         super(view);
         mContext = pContext;
+        this.mHeadline = (TextView) view.findViewById(R.id.tv_headline);
+        this.mSnippet = (TextView) view.findViewById(R.id.tv_snippet);
     }
 
     public void bind(Article pArticle){
         mArticle = pArticle;
-        mHeadline.setText(mArticle.getHeadline().getMain());
+        if(mArticle.getHeadline().getMain() != null){
+            mHeadline.setText(mArticle.getHeadline().getMain());
+        }
+        else{
+            mHeadline.setText(mArticle.getHeadline().getPrintHeadline());
+        }
         mSnippet.setText(mArticle.getSnippet());
 
     }

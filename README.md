@@ -43,6 +43,7 @@ The following **additional** features are implemented:
 * [x] Added landscape support for the app
 * [x] Made UI improvements
 * [x] Implemented managers to seperate business logic from activities
+* [x] Added more categories for News Desk filters
 
 ## Video Walkthrough
 

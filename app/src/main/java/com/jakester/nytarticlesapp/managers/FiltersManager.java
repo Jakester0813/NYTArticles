@@ -14,7 +14,7 @@ public class FiltersManager {
     private static FiltersManager mInstance = null;
 
     public SharedPreferences mPrefs;
-    public boolean mArtChecked, mFashionChecked, mSportsChecked;
+    public boolean mArtChecked, mDiningChecked, mFashionChecked, mHomeChecked, mMoviesChecked, mSportsChecked;
     public String mDate, mSortBy, mDateFilter;
     public int mSortPosition;
 
@@ -32,7 +32,10 @@ public class FiltersManager {
         mSortPosition = mPrefs.getInt(NYTConstants.SORT_POSITION_PREFS,0);
         mDateFilter = mPrefs.getString(NYTConstants.DATE_FILTER_PREFS,null);
         mArtChecked = mPrefs.getBoolean(NYTConstants.PREFS_ART,false);
+        mDiningChecked = mPrefs.getBoolean(NYTConstants.PREFS_DINING,false);
         mFashionChecked = mPrefs.getBoolean(NYTConstants.PREFS_FASHION,false);
+        mHomeChecked = mPrefs.getBoolean(NYTConstants.PREFS_HOME,false);
+        mMoviesChecked = mPrefs.getBoolean(NYTConstants.PREFS_MOVIES,false);
         mSportsChecked = mPrefs.getBoolean(NYTConstants.PREFS_SPORTS,false);
 
     }
@@ -84,6 +87,15 @@ public class FiltersManager {
         mPrefs.edit().putBoolean(NYTConstants.PREFS_ART, value).commit();
     }
 
+    public boolean getDining(){
+        return mDiningChecked;
+    }
+
+    public void setDiningCheck(boolean value){
+        mDiningChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_DINING, value).commit();
+    }
+
     public boolean getFashion(){
         return mFashionChecked;
     }
@@ -91,6 +103,24 @@ public class FiltersManager {
     public void setFashionCheck(boolean value){
         mFashionChecked = value;
         mPrefs.edit().putBoolean(NYTConstants.PREFS_FASHION, value).commit();
+    }
+
+    public boolean getHome(){
+        return mHomeChecked;
+    }
+
+    public void setHomeCheck(boolean value){
+        mHomeChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_HOME, value).commit();
+    }
+
+    public boolean getMovies(){
+        return mMoviesChecked;
+    }
+
+    public void setMoviesCheck(boolean value){
+        mMoviesChecked = value;
+        mPrefs.edit().putBoolean(NYTConstants.PREFS_MOVIES, value).commit();
     }
 
     public boolean getSports(){
@@ -109,8 +139,18 @@ public class FiltersManager {
             if(getArt()){
                 sb.append("\"Art\"");
             }
+            if(getDining()){
+                sb.append("\"Dining\"");
+            }
             if(getFashion()){
                 sb.append("\"Fashion & Style\"");
+            }
+
+            if(getHome()){
+                sb.append("\"Home\"");
+            }
+            if(getMovies()){
+                sb.append("\"Movies\"");
             }
             if(getSports()){
                 sb.append("\"Sports\"");

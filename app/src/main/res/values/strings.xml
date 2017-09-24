@@ -5,7 +5,10 @@
     <string name="sort_prompt">Sort Articles By...</string>
     <string name="news_desks_values">News Desks Values</string>
     <string name="arts_value">Art</string>
+    <string name="dining_value">Dining</string>
     <string name="fashion_value">Fashion &amp; Style</string>
+    <string name="home_value">Home</string>
+    <string name="movies_value">Movies</string>
     <string name="sport_value">Sports</string>
     <string name="save_filters">Save Filters</string>
 </resources>

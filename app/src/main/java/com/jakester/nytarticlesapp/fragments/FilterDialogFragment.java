@@ -28,9 +28,7 @@ import java.util.Calendar;
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener{
     private TextView mDateText,mBeginDateText,mSortByText,mFilterByText, mSaveText;
     private Spinner mSortSpinner;
-    private CheckBox mArtCheck;
-    private CheckBox mFashionCheck;
-    private CheckBox mSportsCheck;
+    private CheckBox mArtCheck, mDiningCheck, mFashionCheck, mHomeCheck, mMoviesCheck, mSportsCheck;
     private LinearLayout mSaveLayout;
     StringBuilder dateFilterBuilder;
 
@@ -50,12 +48,15 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View view) {
         if(!mDateText.getText().toString().equals(NYTConstants.SET_DATE)){
             FiltersManager.getInstance(getActivity()).setDate(mDateText.getText().toString());
-            FiltersManager.getInstance(getActivity()).setDateFilter(dateFilterBuilder.toString());
+            FiltersManager.getInstance(getActivity()).setDateFilter(mBeginDateText.getText().toString());
         }
         FiltersManager.getInstance(getActivity()).setSortFilter(mSortSpinner.getSelectedItem().toString().toLowerCase());
         FiltersManager.getInstance(getActivity()).setSortPosition(mSortSpinner.getSelectedItemPosition());
         FiltersManager.getInstance(getActivity()).setArtChecked(mArtCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setDiningCheck(mDiningCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setFashionCheck(mFashionCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setHomeCheck(mHomeCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setMoviesCheck(mMoviesCheck.isChecked());
         FiltersManager.getInstance(getActivity()).setSportCheck(mSportsCheck.isChecked());
         FilterDialogListener listener = (FilterDialogListener) getActivity();
         listener.onFinishFilterDialog();
@@ -113,8 +114,14 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         mFilterByText = (TextView) view.findViewById(R.id.tv_news_values);
         mArtCheck = (CheckBox) view.findViewById(R.id.checkbox_art);
         mArtCheck.setChecked(FiltersManager.getInstance(getActivity()).getArt());
+        mDiningCheck = (CheckBox) view.findViewById(R.id.checkbox_dining);
+        mDiningCheck.setChecked(FiltersManager.getInstance(getActivity()).getDining());
         mFashionCheck = (CheckBox) view.findViewById(R.id.checkbox_fashion);
         mFashionCheck.setChecked(FiltersManager.getInstance(getActivity()).getFashion());
+        mHomeCheck = (CheckBox) view.findViewById(R.id.checkbox_home);
+        mHomeCheck.setChecked(FiltersManager.getInstance(getActivity()).getHome());
+        mMoviesCheck = (CheckBox) view.findViewById(R.id.checkbox_movies);
+        mMoviesCheck.setChecked(FiltersManager.getInstance(getActivity()).getMovies());
         mSportsCheck = (CheckBox) view.findViewById(R.id.checkbox_sport);
         mSportsCheck.setChecked(FiltersManager.getInstance(getActivity()).getSports());
 

@@ -17,7 +17,10 @@ public class NYTConstants {
     public static final String SORT_POSITION_PREFS = "sort_position";
     public static final String SORT_PREFS = "sort";
     public static final String PREFS_ART = "art";
+    public static final String PREFS_DINING = "dining";
     public static final String PREFS_FASHION = "fashion";
+    public static final String PREFS_HOME = "home";
+    public static final String PREFS_MOVIES = "movies";
     public static final String PREFS_SPORTS = "sports";
 
     public static final String EMPTY_STRING = "";
