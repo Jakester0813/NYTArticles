@@ -26,8 +26,9 @@ import com.jakester.nytarticlesapp.databinding.ActivityMainBinding;
 import com.jakester.nytarticlesapp.fragments.FilterDialogFragment;
 import com.jakester.nytarticlesapp.interfaces.NYTArticlesService;
 import com.jakester.nytarticlesapp.listener.EndlessScrollListener;
+import com.jakester.nytarticlesapp.managers.InternetManager;
 import com.jakester.nytarticlesapp.models.Article;
-import com.jakester.nytarticlesapp.models.FiltersManager;
+import com.jakester.nytarticlesapp.managers.FiltersManager;
 import com.jakester.nytarticlesapp.models.Response;
 import com.jakester.nytarticlesapp.util.APIUtility;
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                if(isNetworkAvailable() && isOnline()) {
+                if(InternetManager.getInstance(MainActivity.this).isInternetAvailable()) {
                     makeArticlesCall(mQuery, 0);
                 }
                 else{
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     @Override
     public void onResume(){
         super.onResume();
-        noInternetDialog = noInternetDialog();
+        noInternetDialog = InternetManager.getInstance(this).noInternetDialog();
     }
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(isNetworkAvailable() && isOnline()) {
+                if(InternetManager.getInstance(MainActivity.this).isInternetAvailable()) {
                     if(mAdapter != null) {
                         mAdapter.clearList();
                         scrollListener.resetState();
@@ -141,6 +142,37 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                showFiltersDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showFiltersDialog() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        FilterDialogFragment filterDialog = FilterDialogFragment.newInstance("Settings");
+        filterDialog.show(fm,"fragment_settings");
+    }
+
+
+
+    @Override
+    public void onFinishFilterDialog() {
+        if(InternetManager.getInstance(this).isInternetAvailable()) {
+            makeArticlesCall(mQuery, 0);
+        }
+        else{
+            noInternetDialog.show();
+        }
     }
 
     public void makeArticlesCall(String q, int page){
@@ -172,65 +204,5 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
             }
         }
         getArticles(q,page,beginDate,sortFilter,newDesks);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                showFiltersDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void showFiltersDialog() {
-        FragmentManager fm = this.getSupportFragmentManager();
-        FilterDialogFragment filterDialog = FilterDialogFragment.newInstance("Settings");
-        filterDialog.show(fm,"fragment_settings");
-    }
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-        return false;
-    }
-
-    @Override
-    public void onFinishFilterDialog() {
-        if(isNetworkAvailable() && isOnline()) {
-            makeArticlesCall(mQuery, 0);
-        }
-        else{
-            noInternetDialog.show();
-        }
-    }
-
-    private AlertDialog noInternetDialog(){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setTitle("No Internet");
-        builder1.setMessage("It seems that you are not connected to the internet. Make sure that you are connected before");
-        builder1.setCancelable(true);
-        builder1.setNeutralButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        return builder1.create();
     }
 }

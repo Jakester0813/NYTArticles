@@ -2,7 +2,6 @@ package com.jakester.nytarticlesapp.fragments;
 
 import android.app.DatePickerDialog;
 import android.support.v4.app.DialogFragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,13 +11,11 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jakester.nytarticlesapp.R;
-import com.jakester.nytarticlesapp.models.FiltersManager;
+import com.jakester.nytarticlesapp.managers.FiltersManager;
 import com.jakester.nytarticlesapp.util.NYTConstants;
 
 import java.util.Calendar;
@@ -56,9 +53,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         }
         FiltersManager.getInstance(getActivity()).setSortFilter(mSortSpinner.getSelectedItem().toString().toLowerCase());
         FiltersManager.getInstance(getActivity()).setSortPosition(mSortSpinner.getSelectedItemPosition());
-        FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_ART,mArtCheck.isChecked());
-        FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_FASHION,mFashionCheck.isChecked());
-        FiltersManager.getInstance(getActivity()).setCheck(NYTConstants.PREFS_SPORTS,mSportsCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setArtChecked(mArtCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setFashionCheck(mFashionCheck.isChecked());
+        FiltersManager.getInstance(getActivity()).setSportCheck(mSportsCheck.isChecked());
         FilterDialogListener listener = (FilterDialogListener) getActivity();
         listener.onFinishFilterDialog();
         dismiss();

@@ -1,4 +1,4 @@
-package com.jakester.nytarticlesapp.models;
+package com.jakester.nytarticlesapp.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import com.jakester.nytarticlesapp.util.NYTConstants;
 
 public class FiltersManager {
 
-    public static FiltersManager mInstance;
+    private static FiltersManager mInstance = null;
 
     public SharedPreferences mPrefs;
     public boolean mArtChecked, mFashionChecked, mSportsChecked;

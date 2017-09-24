@@ -42,7 +42,7 @@ The following **additional** features are implemented:
 
 * [x] Added landscape support for the app
 * [ ] Made UI improvements
-* [ ] Uses Managers to seperate data from activities
+* [x] Implemented managers to seperate business logic from activities
 
 ## Video Walkthrough
 
