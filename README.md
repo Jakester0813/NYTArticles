@@ -55,6 +55,7 @@ Portrait Mode:
 <img src='https://i.imgur.com/NGIli2M.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Portrait' />
 
 Landscape Mode:
+
 <img src='https://i.imgur.com/nzP42gY.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Landscape' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
