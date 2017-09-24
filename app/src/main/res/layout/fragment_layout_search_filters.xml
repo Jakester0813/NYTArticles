@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-
         android:gravity="center"
         android:padding="12dp">
 
@@ -19,23 +18,33 @@
             android:id="@+id/tv_begin_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
             android:text="@string/begin_date"/>
         <TextView
             android:id="@+id/tv_begin_date_text"
             android:layout_marginTop="4dp"
+            android:textColor="@color/textPrimaryColor"
+            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_sort_order"
             android:layout_marginTop="24dp"
+
+            android:textSize="14dp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:text="@string/sort_order"/>
         <Spinner
             android:id="@+id/sp_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20dp"
             android:prompt="@string/sort_prompt"
             android:entries="@array/sort_array"/>
 
@@ -44,33 +53,59 @@
             android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
             android:text="@string/news_desks_values" />
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="4dp">
+            android:layout_height="wrap_content">
             <CheckBox android:id="@+id/checkbox_art"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="20dp"
                 android:text="@string/arts_value" />
             <CheckBox android:id="@+id/checkbox_fashion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="20dp"
                 android:text="@string/fashion_value" />
             <CheckBox android:id="@+id/checkbox_sport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="20dp"
                 android:text="@string/sport_value" />
         </LinearLayout>
 
+
+
+
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_save_filter"
-        android:layout_width="match_parent"
+    <LinearLayout
+    android:id="@+id/ll_save_filter"
+    android:layout_width="match_parent"
+    android:layout_marginTop="4dp"
+    android:layout_height="50dp"
+    android:gravity="center"
+    android:background="@color/colorAccent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
         android:text="@string/save_filters"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

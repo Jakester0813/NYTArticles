@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     ArticlesAdapter mAdapter;
     private EndlessScrollListener scrollListener;
     ActivityMainBinding binding;
-    String mQuery = "";
+    static String mQuery = "";
     int mPage = 0;
     AlertDialog noInternetDialog;
 
@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     public void onResume(){
         super.onResume();
         noInternetDialog = InternetManager.getInstance(this).noInternetDialog();
+        if(!mQuery.equals(""))
+            makeArticlesCall(mQuery,0);
     }
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){

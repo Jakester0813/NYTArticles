@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,12 +26,12 @@ import java.util.Calendar;
  */
 
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener{
-    private TextView mDateText,mBeginDateText,mSortByText,mFilterByText;
+    private TextView mDateText,mBeginDateText,mSortByText,mFilterByText, mSaveText;
     private Spinner mSortSpinner;
     private CheckBox mArtCheck;
     private CheckBox mFashionCheck;
     private CheckBox mSportsCheck;
-    private Button mButton;
+    private LinearLayout mSaveLayout;
     StringBuilder dateFilterBuilder;
 
     public FilterDialogFragment(){
@@ -117,8 +118,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         mSportsCheck = (CheckBox) view.findViewById(R.id.checkbox_sport);
         mSportsCheck.setChecked(FiltersManager.getInstance(getActivity()).getSports());
 
-        mButton = (Button) view.findViewById(R.id.btn_save_filter);
-        mButton.setOnClickListener(this);
+        mSaveText = (TextView) view.findViewById(R.id.tv_save);
+        mSaveLayout = (LinearLayout) view.findViewById(R.id.ll_save_filter);
+        mSaveLayout.setOnClickListener(this);
 
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

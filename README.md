@@ -41,7 +41,7 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Added landscape support for the app
-* [ ] Made UI improvements
+* [x] Made UI improvements
 * [x] Implemented managers to seperate business logic from activities
 
 ## Video Walkthrough
