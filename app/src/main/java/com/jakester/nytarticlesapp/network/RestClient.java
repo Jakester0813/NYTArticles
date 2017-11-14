@@ -4,6 +4,7 @@ import com.jakester.nytarticlesapp.util.NYTConstants;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -19,6 +20,7 @@ public class RestClient {
         retrofit = new Retrofit.Builder()
                 .baseUrl(NYTConstants.URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
 

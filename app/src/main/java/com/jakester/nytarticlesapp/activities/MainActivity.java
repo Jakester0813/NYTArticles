@@ -2,12 +2,8 @@ package com.jakester.nytarticlesapp.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +11,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.jakester.nytarticlesapp.R;
 import com.jakester.nytarticlesapp.adapters.ArticlesAdapter;
 import com.jakester.nytarticlesapp.databinding.ActivityMainBinding;
@@ -41,6 +39,10 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements FilterDialogFragment.FilterDialogListener{
 
@@ -107,19 +109,52 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
         NYTArticlesService service = APIUtility.getArticleService();
-        service.getArticles(query, page, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
+
+        Observable<Response> articles = service.getArticles(query, page, date, sortBy, newsDesk);
+
+        articles.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        e.printStackTrace();
+                        if(mProgress.isShowing()){
+                            mProgress.hide();
+                        }
+                        noArticlesDialog.show();
+                    }
+                    @Override public void onNext(Response response) {
+                        if(mProgress.isShowing()){
+                            mProgress.hide();
+                        }
+                        if (response != null){
+                            ArrayList<Article> articles = (ArrayList<Article>) response.getArticlesResponse().getArticles();
+                            articles = Lists.newArrayList(Iterables.filter(articles,
+                                            new Predicate<Article>() {
+                                @Override
+                                public boolean apply(Article input) {
+                                    if (input != null) {
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            }));
+                            mAdapter.addList(articles);
+                        }
+                        else{
+                            if(page != 1)
+                                noArticlesDialog.show();
+                        }
+                    }
+                });
+        /*service.getArticles(query, page, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                if (response.body() != null){
-                    mAdapter.addList(response.body().getArticlesResponse().getArticles());
-                    if(mProgress.isShowing()){
-                        mProgress.hide();
-                    }
-                }
-                else{
-                    if(page != 1)
-                        noArticlesDialog.show();
-                }
+
             }
 
             @Override
@@ -127,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
                 noArticlesDialog.show();
             }
-        });
+        });*/
     }
 
     @Override
