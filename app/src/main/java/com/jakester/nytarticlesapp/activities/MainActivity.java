@@ -41,6 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
     AlertDialog noInternetDialog;
     AlertDialog noArticlesDialog;
     ProgressDialog mProgress;
-    boolean mFromWebPage;
+    Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,60 +110,60 @@ public class MainActivity extends AppCompatActivity implements FilterDialogFragm
 
     public void getArticles(String query, int page, String date, String sortBy, String newsDesk){
         NYTArticlesService service = APIUtility.getArticleService();
-
-        Observable<Response> articles = service.getArticles(query, page, date, sortBy, newsDesk);
-
-        articles.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override public void onError(Throwable e) {
-                        e.printStackTrace();
-                        if(mProgress.isShowing()){
-                            mProgress.hide();
+            subscription = service.getArticles(query, page, date, sortBy, newsDesk).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Response>() {
+                        @Override
+                        public void onCompleted() {
+                            if (mProgress.isShowing()) {
+                                mProgress.hide();
+                            }
+                            noArticlesDialog.show();
                         }
-                        noArticlesDialog.show();
-                    }
-                    @Override public void onNext(Response response) {
-                        if(mProgress.isShowing()){
-                            mProgress.hide();
-                        }
-                        if (response != null){
-                            ArrayList<Article> articles = (ArrayList<Article>) response.getArticlesResponse().getArticles();
-                            articles = Lists.newArrayList(Iterables.filter(articles,
-                                            new Predicate<Article>() {
-                                @Override
-                                public boolean apply(Article input) {
-                                    if (input != null) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            }));
-                            mAdapter.addList(articles);
-                        }
-                        else{
-                            if(page != 1)
-                                noArticlesDialog.show();
-                        }
-                    }
-                });
-        /*service.getArticles(query, page, date, sortBy, newsDesk).enqueue(new Callback<Response>() {
-            @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
 
-            }
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            if (mProgress.isShowing()) {
+                                mProgress.hide();
+                            }
+                            noArticlesDialog.show();
+                        }
 
-            @Override
-            public void onFailure(Call<Response> call, Throwable t) {
+                        @Override
+                        public void onNext(Response response) {
+                            if (mProgress.isShowing()) {
+                                mProgress.hide();
+                            }
+                            if (response != null) {
+                                ArrayList<Article> articles = (ArrayList<Article>) response.getArticlesResponse().getArticles();
+                                articles = Lists.newArrayList(Iterables.filter(articles,
+                                        new Predicate<Article>() {
+                                            @Override
+                                            public boolean apply(Article input) {
+                                                if (input != null) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }
+                                        }));
+                                mAdapter.addList(articles);
+                            } else {
+                                if (page != 1)
+                                    noArticlesDialog.show();
+                            }
+                        }
+                    });
 
-                noArticlesDialog.show();
-            }
-        });*/
+        service.getArticles(query, page, date, sortBy, newsDesk);
+
+    }
+
+    @Override protected void onDestroy() {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
